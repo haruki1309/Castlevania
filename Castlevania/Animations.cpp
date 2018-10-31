@@ -6,12 +6,12 @@ void Animation::Add(int spriteId, DWORD time)
 	int t = time;
 	if (time == 0) t = this->defaultTime;
 
-	LPSPRITE sprite = Sprites::GetInstance()->Get(spriteId);
+	LPSPRITE sprite = Sprites::GetInstance()->GetSprite(spriteId);
 	LPANIMATION_FRAME frame = new AnimationFrame(sprite, t);
 	frames.push_back(frame);
 }
 
-void Animation::Render(float x, float y)
+void Animation::Render()
 {
 	DWORD now = GetTickCount();
 	if (currentFrame == -1)
@@ -27,11 +27,31 @@ void Animation::Render(float x, float y)
 			currentFrame++;
 			lastFrameTime = now;
 			if (currentFrame == frames.size()) currentFrame = 0;
-			//DebugOut(L"now: %d, lastFrameTime: %d, t: %d\n", now, lastFrameTime, t);
 		}
 
 	}
+	frames[currentFrame]->GetSprite()->Draw();
+}
 
+void Animation::Render(int x, int y)
+{
+	DWORD now = GetTickCount();
+	if (currentFrame == -1)
+	{
+		currentFrame = 0;
+		lastFrameTime = now;
+	}
+	else
+	{
+		DWORD t = frames[currentFrame]->GetTime();
+		if (now - lastFrameTime > t)
+		{
+			currentFrame++;
+			lastFrameTime = now;
+			if (currentFrame == frames.size()) currentFrame = 0;
+		}
+
+	}
 	frames[currentFrame]->GetSprite()->Draw(x, y);
 }
 
@@ -49,7 +69,7 @@ void Animations::Add(int id, LPANIMATION ani)
 	animationsList[id] = ani;
 }
 
-LPANIMATION Animations::Get(int id)
+LPANIMATION Animations::GetAnimation(int id)
 {
 	return animationsList[id];
 }

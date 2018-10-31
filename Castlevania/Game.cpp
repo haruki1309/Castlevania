@@ -1,81 +1,98 @@
 #include "Game.h"
 
+
 Game * Game::__instance = NULL;
 
-/*
-Initialize DirectX, create a Direct3D device for rendering within the window, initial Sprite library for
-rendering 2D images
-- hInst: Application instance handle
-- hWnd: Application window handle
-*/
-void Game::Init(HWND hWnd)
+Game::Game()
 {
-	LPDIRECT3D9 d3d = Direct3DCreate9(D3D_SDK_VERSION);
-
-	this->hWnd = hWnd;
-
-	D3DPRESENT_PARAMETERS d3dpp;
-
-	ZeroMemory(&d3dpp, sizeof(d3dpp));
-
-	d3dpp.Windowed = TRUE;
-	d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
-	d3dpp.BackBufferFormat = D3DFMT_X8R8G8B8;
-	d3dpp.BackBufferCount = 1;
-
-	RECT r;
-	GetClientRect(hWnd, &r);	// retrieve Window width & height 
-
-	d3dpp.BackBufferHeight = r.bottom + 1;
-	d3dpp.BackBufferWidth = r.right + 1;
-
-	d3d->CreateDevice(
-		D3DADAPTER_DEFAULT,
-		D3DDEVTYPE_HAL,
-		hWnd,
-		D3DCREATE_SOFTWARE_VERTEXPROCESSING,
-		&d3dpp,
-		&d3ddv);
-
-	if (d3ddv == NULL)
-	{
-		OutputDebugString("[ERROR] CreateDevice failed\n");
-		return;
-	}
-
-	d3ddv->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &backBuffer);
-
-	// Initialize sprite helper from Direct3DX helper library
-	D3DXCreateSprite(d3ddv, &spriteHandler);
-
-	OutputDebugString("[INFO] InitGame done;\n");
-}
-
-/*
-Utility function to wrap LPD3DXSPRITE::Draw
-*/
-void Game::Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom)
-{
-	D3DXVECTOR3 p(x, y, 0);
-	RECT r;
-	r.left = left;
-	r.top = top;
-	r.right = right;
-	r.bottom = bottom;
-	spriteHandler->Draw(texture, &r, NULL, &p, D3DCOLOR_XRGB(255, 255, 255));
 }
 
 Game::~Game()
 {
-	if (spriteHandler != NULL) spriteHandler->Release();
-	if (backBuffer != NULL) backBuffer->Release();
-	if (d3ddv != NULL) d3ddv->Release();
-	if (d3d != NULL) d3d->Release();
-}
 
+}
 
 Game *Game::GetInstance()
 {
 	if (__instance == NULL) __instance = new Game();
 	return __instance;
+}
+
+
+bool Game::Initialize(HWND hWnd)
+{
+	graphicsDevice = Graphics::GetInstance();
+
+	inputDevice = InputDevice::GetInstance();
+
+	this->hWnd = hWnd;
+
+	if(!graphicsDevice->Initialize(this->hWnd, GAME_WINDOWED) || !inputDevice->Initialize(this->hWnd))
+	{
+		return false;
+	}
+	sceneManager = SceneManager::GetInstance();
+	sceneManager->LoadScene(GAME_ENTRANCE_SCENE);
+
+	return true;
+}
+
+void Game::Update(DWORD gameTime)
+{
+	sceneManager->Update(gameTime);
+}
+
+void Game::Render(DWORD gameTime)
+{
+	graphicsDevice->Clear(D3DCOLOR_XRGB(0, 0, 0));
+
+	if (graphicsDevice->Begin())
+	{
+		graphicsDevice->device->ColorFill(graphicsDevice->GetBackBuffer(), NULL, D3DCOLOR_XRGB(200, 200, 255));
+
+		sceneManager->GetCurrentScene()->Draw();
+
+		graphicsDevice->End();
+	}
+
+	graphicsDevice->Present(); // !!!
+	
+}
+
+void Game::Run()
+{
+	MSG msg;
+	int done = 0;
+	DWORD frameStart = GetTickCount();
+	DWORD tickPerFrame = 1000 / FRAMERATE;
+
+	while (!done)
+	{
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		{
+			if (msg.message == WM_QUIT) done = 1;
+
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+
+		DWORD now = GetTickCount();
+
+		// dt: the time between (beginning of last frame) and now
+		// this frame: the frame we are about to render
+		DWORD dt = now - frameStart;
+
+		if (dt >= tickPerFrame)
+		{
+			frameStart = now;
+
+			inputDevice->ProcessKeyBoard();
+
+			Update(dt);
+
+			Render(dt);
+		}
+		else
+			Sleep(tickPerFrame - dt);
+	}
 }

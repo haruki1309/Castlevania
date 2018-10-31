@@ -1,14 +1,23 @@
-#include <Windows.h>
-#include "Define.h"
-#include "Game.h"
+#include <windows.h>
+#include <d3d9.h>
+#include <d3dx9.h>
 
-//Procedure cua ca chuong trinh
+#include "Game.h"
+#include "GameObject.h"
+#include "Textures.h"
+#include "Define.h"
+
+
+
+Game * myGame;
+
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message) {
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;
+
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
@@ -16,8 +25,7 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-//Windows Create
-HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int ScreenHeight)
+bool CreateGameWindow(HWND & hWnd, HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int ScreenHeight)
 {
 	WNDCLASSEX wc;
 	wc.cbSize = sizeof(WNDCLASSEX);
@@ -25,96 +33,67 @@ HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int Sc
 	wc.style = CS_HREDRAW | CS_VREDRAW;
 	wc.hInstance = hInstance;
 
-	wc.lpfnWndProc = (WNDPROC)WinProc;
+	wc.lpfnWndProc = WinProc;
 	wc.cbClsExtra = 0;
 	wc.cbWndExtra = 0;
 	wc.hIcon = NULL;
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-	wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
+	wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
 	wc.lpszMenuName = NULL;
 	wc.lpszClassName = WINDOW_CLASS_NAME;
 	wc.hIconSm = NULL;
+		
+	if (RegisterClassEx(&wc) == 0)
+	{
+		return false;
+	}
 
-	RegisterClassEx(&wc);
-
-	HWND hWnd = CreateWindow(
-		WINDOW_CLASS_NAME,
-		MAIN_WINDOW_TITLE,
-		WS_OVERLAPPEDWINDOW, // WS_EX_TOPMOST | WS_VISIBLE | WS_POPUP,
-		CW_USEDEFAULT,
-		CW_USEDEFAULT,
-		ScreenWidth,
-		ScreenHeight,
-		NULL,
-		NULL,
-		hInstance,
-		NULL);
+	hWnd = CreateWindow(
+			WINDOW_CLASS_NAME,
+			MAIN_WINDOW_TITLE,
+			WS_OVERLAPPEDWINDOW, // WS_EX_TOPMOST | WS_VISIBLE | WS_POPUP,
+			CW_USEDEFAULT,
+			CW_USEDEFAULT,
+			ScreenWidth,
+			ScreenHeight,
+			NULL,
+			NULL,
+			hInstance,
+			NULL);
 
 	if (!hWnd)
 	{
 		OutputDebugString("[ERROR] CreateWindow failed");
 		DWORD ErrCode = GetLastError();
-		return FALSE;
+		return false;
 	}
-
+	if (!FULLSCREEN)
+	{
+		RECT rectClient;
+		GetClientRect(hWnd, &rectClient);
+		MoveWindow(hWnd, 200, 50, SCREEN_WIDTH + (SCREEN_WIDTH - rectClient.right -1), SCREEN_HEIGHT + (SCREEN_HEIGHT - rectClient.bottom -1), TRUE);
+	}
 	ShowWindow(hWnd, nCmdShow);
 	UpdateWindow(hWnd);
 
-	return hWnd;
+	return true;
 }
 
-//Chu y cho nay: co the cau truc lai
-int Run()
-{
-	MSG msg;
-	int done = 0;
-	DWORD frameStart = GetTickCount();
-	DWORD tickPerFrame = 1000 / MAX_FRAME_RATE;
-
-	while (!done)
-	{
-		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-		{
-			if (msg.message == WM_QUIT) done = 1;
-
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-
-		DWORD now = GetTickCount();
-
-		// dt: the time between (beginning of last frame) and now
-		// this frame: the frame we are about to render
-		DWORD dt = now - frameStart;
-
-		if (dt >= tickPerFrame)
-		{
-			frameStart = now;
-
-			//Update(dt);
-			//Render();
-		}
-		else
-			Sleep(tickPerFrame - dt);
-	}
-
-	return 1;
-}
-
-//Bien toan cuc quan ly ca game
-Game * game;
-
-//Ham Main()
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	HWND hWnd = CreateGameWindow(hInstance, nCmdShow, SCREEN_WIDTH, SCREEN_HEIGHT);
+	HWND hWnd;
+	myGame = new Game();
 
-	game = Game::GetInstance();
-	game->Init(hWnd);
+	if (CreateGameWindow(hWnd, hInstance, nCmdShow, SCREEN_WIDTH, SCREEN_HEIGHT))
+	{
+		myGame = Game::GetInstance();
 
-	Run();
+		myGame->Initialize(hWnd);
 
+		SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH * 2.5, SCREEN_HEIGHT * 2.3, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
+
+		myGame->Run();
+		
+	}
 	return 0;
 }
-
-

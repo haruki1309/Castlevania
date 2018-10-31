@@ -8,6 +8,7 @@ using namespace std;
 //Struture of Animation Frame
 class AnimationFrame
 {
+private:
 	LPSPRITE sprite;
 	DWORD time;
 
@@ -17,7 +18,7 @@ public:
 	LPSPRITE GetSprite() { return sprite; }
 };
 
-typedef AnimationFrame *LPANIMATION_FRAME;
+typedef AnimationFrame * LPANIMATION_FRAME;
 
 //Struture of Animation
 class Animation
@@ -29,7 +30,8 @@ class Animation
 public:
 	Animation(int defaultTime) { this->defaultTime = defaultTime; lastFrameTime = -1; currentFrame = -1; }
 	void Add(int spriteId, DWORD time = 0);
-	void Render(float x, float y);
+	void Render();
+	void Render(int x, int y);
 };
 
 typedef Animation *LPANIMATION;
@@ -43,7 +45,7 @@ class Animations
 
 public:
 	void Add(int id, LPANIMATION ani);
-	LPANIMATION Get(int id);
+	LPANIMATION GetAnimation(int id);
 
 	static Animations * GetInstance();
 };

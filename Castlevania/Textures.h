@@ -15,7 +15,7 @@ private:
 public:
 	Textures();
 	void Add(int id, LPCSTR filePath, D3DCOLOR transparentcolor);
-	LPDIRECT3DTEXTURE9 Get(unsigned int i);
+	LPDIRECT3DTEXTURE9 GetTexture(unsigned int i);
 
 	static Textures * GetInstance();
 

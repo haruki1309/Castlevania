@@ -1,6 +1,7 @@
 #pragma once
 #include <Windows.h>
 #include <d3dx9.h>
+#include "Graphics.h"
 #include <unordered_map>
 
 using namespace std;
@@ -9,20 +10,20 @@ using namespace std;
 class Sprite
 {
 private:
-	int id;
+	int						id;				// Sprite ID in the sprite database
 
-	//toa do
-	int left;
-	int top;
-	int right;
-	int bottom;
+	RECT					sourceRect;
+	LPD3DXSPRITE			spriteHandler;
+	LPDIRECT3DTEXTURE9		texture;
 
-	LPDIRECT3DTEXTURE9 texture;
+	D3DXVECTOR3				position;
+
 public:
-	Sprite(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex);
+	Sprite(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex, D3DXVECTOR3 position);
 
-	void Draw(float x, float y);
-
+	void Draw();
+	void Draw(int x, int y);
+	void Draw(D3DXVECTOR3 position, RECT rect);
 };
 
 typedef Sprite * LPSPRITE;
@@ -35,9 +36,9 @@ class Sprites
 	unordered_map<int, LPSPRITE> sprites;
 
 public:
-	void Add(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex);
-	LPSPRITE Get(int id);
+	void Add(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex, D3DXVECTOR3 position);
+	LPSPRITE GetSprite(int id);
 
-	static Sprites * GetInstance();;
+	static Sprites * GetInstance();
 };
 

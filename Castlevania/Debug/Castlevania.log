@@ -1,5 +1,6 @@
-﻿  WinMain.cpp
-  Sprites.cpp
-  Animations.cpp
-  Generating Code...
+﻿  GameEntranceScene.cpp
+  c:\program files (x86)\microsoft directx sdk (june 2010)\include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+f:\đồ án môn học\doan_game\castlevania\castlevania\inputdevice.h(5): warning C4005: 'DIRECTINPUT_VERSION': macro redefinition
+  c:\program files (x86)\microsoft directx sdk (june 2010)\include\dinput.h(42): note: see previous definition of 'DIRECTINPUT_VERSION'
+f:\đồ án môn học\doan_game\castlevania\castlevania\gameentrancescene.cpp(33): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
   Castlevania.vcxproj -> F:\Đồ Án Môn Học\DoAn_Game\Castlevania\Debug\Castlevania.exe

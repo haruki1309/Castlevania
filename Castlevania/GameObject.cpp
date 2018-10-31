@@ -1,35 +1,25 @@
 #include "GameObject.h"
 
-
-
 GameObject::GameObject()
 {
 	x = y = 0;
-	vx = 0.07f;
+	vx = vy = 0;
+	nx = 1;
 }
-
-void GameObject::Update(DWORD dt)
-{
-	x += vx * dt;
-	if ((vx>0 && x > 290) || (x < 0 && vx<0)) vx = -vx;
-}
-
-//void GameObject::Render()
-//{
-//	LPANIMATION ani;
-//	if (vx>0) ani = animations[0]; else ani = animations[1];
-//	//ani = animations[0];
-//	ani->Render(x, y);
-//}
-
-//void GameObject::AddAnimation(int aniId)
-//{
-//	LPANIMATION ani = GameObject::GetInstance()->Get(aniId);
-//	animations.push_back(ani);
-//}
-
-
-
 GameObject::~GameObject()
 {
+
 }
+void GameObject::Update(DWORD dt)
+{
+	this->dt = dt;
+	x += vx * dt;
+	y += vy * dt;
+}
+
+void GameObject::AddAnimation(int aniId)
+{
+	LPANIMATION ani = Animations::GetInstance()->GetAnimation(aniId);
+	animations.push_back(ani);
+}
+

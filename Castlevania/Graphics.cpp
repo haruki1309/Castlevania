@@ -1,5 +1,12 @@
 #include "Graphics.h"
 
+Graphics * Graphics::__instance = NULL;
+
+Graphics * Graphics::GetInstance()
+{
+	if (__instance == NULL) __instance = new Graphics();
+	return __instance;
+}
 
 Graphics::Graphics()
 {
@@ -30,6 +37,12 @@ bool Graphics::Initialize(HWND hWnd, bool  windowed)
 	presentationParams.SwapEffect = D3DSWAPEFFECT_DISCARD;
 	presentationParams.hDeviceWindow = hWnd;
 
+	RECT userRect;
+	GetClientRect(hWnd, &userRect);
+
+	presentationParams.BackBufferHeight = userRect.bottom + 1;
+	presentationParams.BackBufferWidth = userRect.right + 1;
+
 	if (!SUCCEEDED(direct3d->CreateDevice(D3DADAPTER_DEFAULT, //Adapter mac dinh
 		D3DDEVTYPE_HAL, //Device Type: High Speed Graphic Card
 		hWnd,
@@ -39,6 +52,11 @@ bool Graphics::Initialize(HWND hWnd, bool  windowed)
 	{
 		return false;
 	}
+
+	device->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &backBuffer);
+
+	D3DXCreateSprite(Graphics::GetInstance()->device, &spriteHandler);
+
 	return true;
 }
 
@@ -47,9 +65,9 @@ void Graphics::Clear(D3DCOLOR color)
 	device->Clear(0, NULL, D3DCLEAR_TARGET, color, 1.0f, 0);
 }
 
-void Graphics::Begin()
+bool Graphics::Begin()
 {
-	device->BeginScene();
+	return device->BeginScene();
 }
 
 void Graphics::End()

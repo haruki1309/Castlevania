@@ -10,6 +10,7 @@ Textures * Textures::instance = NULL;
 
 Textures::Textures()
 {
+
 }
 
 Textures * Textures::GetInstance()
@@ -17,11 +18,11 @@ Textures * Textures::GetInstance()
 	if (instance == NULL)
 	{
 		instance = new Textures();
-		return instance;
 	}
+	return instance;
 }
 
-LPDIRECT3DTEXTURE9 Textures::Get(unsigned int i)
+LPDIRECT3DTEXTURE9 Textures::GetTexture(unsigned int i)
 {
 	return texturesList[i];
 }
@@ -37,11 +38,11 @@ void Textures::Add(int id, LPCSTR filePath, D3DCOLOR transparentColor)
 		return;
 	}
 
-	LPDIRECT3DDEVICE9 d3ddv = Game::GetInstance()->GetDirect3DDevice();
+	LPDIRECT3DDEVICE9 d3ddevice = Graphics::GetInstance()->device;
 	LPDIRECT3DTEXTURE9 texture;
 
 	result = D3DXCreateTextureFromFileEx(
-		d3ddv,
+		d3ddevice,
 		filePath,
 		info.Width,  
 		info.Height,
