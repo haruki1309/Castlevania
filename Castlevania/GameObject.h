@@ -17,8 +17,7 @@ typedef GameObject * LPGAMEOBJECT;
 class GameObject
 {
 public:
-	float x;
-	float y;
+	D3DXVECTOR3 position;
 
 	float dx;	// dx = vx*dt
 	float dy;	// dy = vy*dt
@@ -35,9 +34,11 @@ public:
 	vector<LPANIMATION> animations;
 
 public:
-	void SetPosition(float x, float y) { this->x = x, this->y = y; }
+	void SetPosition(float x, float y) { this->position.x = x, this->position.y = y; }
 	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
-	void GetPosition(float &x, float &y) { x = this->x; y = this->y; }
+	void SetDirection(int _nx) { this->nx = _nx; }
+
+	D3DXVECTOR3 GetPosition() { return this->position; }
 	void GetSpeed(float &vx, float &vy) { vx = this->vx; vy = this->vy; }
 	int GetState() { return this->state; }
 	void AddAnimation(int aniId);

@@ -11,6 +11,8 @@ void Animation::Add(int spriteId, DWORD time)
 	frames.push_back(frame);
 }
 
+
+
 void Animation::Render()
 {
 	DWORD now = GetTickCount();
@@ -25,10 +27,13 @@ void Animation::Render()
 		if (now - lastFrameTime > t)
 		{
 			currentFrame++;
+			
 			lastFrameTime = now;
-			if (currentFrame == frames.size()) currentFrame = 0;
+			if (currentFrame == frames.size())
+			{
+				currentFrame = 0;
+			}
 		}
-
 	}
 	frames[currentFrame]->GetSprite()->Draw();
 }
@@ -47,10 +52,13 @@ void Animation::Render(int x, int y)
 		if (now - lastFrameTime > t)
 		{
 			currentFrame++;
+			
 			lastFrameTime = now;
-			if (currentFrame == frames.size()) currentFrame = 0;
-		}
-
+			if (currentFrame == frames.size())
+			{
+				currentFrame = 0;
+			}
+		}		
 	}
 	frames[currentFrame]->GetSprite()->Draw(x, y);
 }

@@ -97,16 +97,18 @@ void TileMap::LoadMatrixMap(LPCSTR fileSource)
 void TileMap::Draw(ViewPort *viewPort)
 {
 	D3DXVECTOR3 cameraPos = viewPort->GetCameraPos();
+	D3DXVECTOR3 tilePos;
+	RECT tileRect;
+
 	int cameraWidth, cameraHeight;
 	viewPort->GetCameraSize(cameraWidth, cameraHeight);
 
-	int colStart = (int)(cameraPos.x + 1) / tileWidth;
-	int colEnd = cameraWidth / tileWidth - 1;
-	int rowStart = (int)(cameraPos.y + 1 - 40) / tileHeight;
-	int rowEnd = cameraHeight / tileHeight - 1;
+	int colStart = (int)cameraPos.x / tileWidth;
+	int colEnd = ((int)cameraPos.x + cameraWidth) / tileWidth < cols - 1 ? ((int)cameraPos.x + cameraWidth) / tileWidth : cols - 1;
+	int rowStart = (int)cameraPos.y % 40 / tileHeight;
+	int rowEnd = ((int)cameraPos.y % 40  + cameraHeight) / tileHeight < rows - 1 ? ((int)cameraPos.y % 40 + cameraHeight) / tileHeight : rows - 1;
 
-	RECT tileRect;
-
+	
 	for (int i = rowStart; i <= rowEnd; i++)
 	{
 		for (int j = colStart; j <= colEnd; j++)
@@ -116,7 +118,11 @@ void TileMap::Draw(ViewPort *viewPort)
 			tileRect.right = tileRect.left + 16;
 			tileRect.bottom = tileRect.top + 16;
 
-			tileSet->Draw(D3DXVECTOR3(cameraPos.x + j * 16, cameraPos.y + i * 16, 0), tileRect);
+			tilePos = D3DXVECTOR3(j * 16, i * 16 + 40, 0);
+
+			tilePos = viewPort->ConvertPosInViewPort(tilePos);
+
+			tileSet->Draw(tilePos, tileRect);
 		}
 	}
 }

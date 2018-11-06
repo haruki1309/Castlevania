@@ -38,7 +38,7 @@ bool CreateGameWindow(HWND & hWnd, HINSTANCE hInstance, int nCmdShow, int Screen
 	wc.cbWndExtra = 0;
 	wc.hIcon = NULL;
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-	wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
+	wc.hbrBackground = CreateSolidBrush(RGB(0, 0, 0));
 	wc.lpszMenuName = NULL;
 	wc.lpszClassName = WINDOW_CLASS_NAME;
 	wc.hIconSm = NULL;
@@ -88,9 +88,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	{
 		myGame = Game::GetInstance();
 
-		myGame->Initialize(hWnd);
+		myGame->Initialize(hWnd); // if
 
-		SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH * 2.5, SCREEN_HEIGHT * 2.3, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
+		SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH * 2, SCREEN_HEIGHT * 2, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
 
 		myGame->Run();
 		

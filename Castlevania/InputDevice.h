@@ -11,20 +11,19 @@ class InputDevice
 private:
 	static InputDevice * instance;
 
-	LPDIRECTINPUT8       di;		         
-	LPDIRECTINPUTDEVICE8 didv;		
+	LPDIRECTINPUT8       di;			//direct input object	         
+	LPDIRECTINPUTDEVICE8 didv;			//direct input device
 
-	BYTE  keyStates[256];	
-
-	DIDEVICEOBJECTDATA keyEvents[KEYBOARD_BUFFER_SIZE];		
+	BYTE  keyStates[256];				// DirectInput keyboard state buffer 
+	DIDEVICEOBJECTDATA keyEvents[KEYBOARD_BUFFER_SIZE];		// Buffered keyboard data
 
 public:
 	InputDevice();
 	~InputDevice();
 
-	bool Initialize(HWND hWnd);
-
 	int IsKeyDown(int keyCode);
+
+	bool Initialize(HWND hWnd);
 
 	void ProcessKeyBoard();
 

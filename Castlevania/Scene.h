@@ -30,7 +30,7 @@ public:
 
 	virtual void OnKeyUp(int keyCode) = 0;
 	virtual void OnKeyDown(int keyCode) = 0;
-
+	virtual void KeyState() = 0;
 	virtual bool GetChangingState() { return this->isChangeState; }
 	virtual void SetChangingState(bool _isChangeState) { this->isChangeState = _isChangeState; }
 

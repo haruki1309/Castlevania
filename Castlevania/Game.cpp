@@ -33,7 +33,6 @@ bool Game::Initialize(HWND hWnd)
 	}
 	sceneManager = SceneManager::GetInstance();
 	sceneManager->LoadScene(GAME_ENTRANCE_SCENE);
-
 	return true;
 }
 
@@ -48,7 +47,7 @@ void Game::Render(DWORD gameTime)
 
 	if (graphicsDevice->Begin())
 	{
-		graphicsDevice->device->ColorFill(graphicsDevice->GetBackBuffer(), NULL, D3DCOLOR_XRGB(200, 200, 255));
+		graphicsDevice->device->ColorFill(graphicsDevice->GetBackBuffer(), NULL, D3DCOLOR_XRGB(0, 0, 0));
 
 		sceneManager->GetCurrentScene()->Draw();
 

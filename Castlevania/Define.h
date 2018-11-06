@@ -12,7 +12,7 @@
 #define SCREEN_WIDTH		256
 #define SCREEN_HEIGHT		224
 
-#define MAX_FRAME_RATE		90
+#define MAX_FRAME_RATE		60
 #define FRAME_RATE			30
 
 #define FPS					60

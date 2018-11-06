@@ -8,7 +8,7 @@ void Bat::Update(DWORD dt)
 
 void Bat::Render()
 {
-	this->animations[BAT_ANI_FLY]->Render(x, y);
+	this->animations[BAT_ANI_FLY]->Render(this->position.x, this->position.y);
 }
 
 void Cloud::Update(DWORD dt)
@@ -18,7 +18,7 @@ void Cloud::Update(DWORD dt)
 
 void Cloud::Render()
 {
-	this->animations[CLOUD_ANI_FLY]->Render(x, y);
+	this->animations[CLOUD_ANI_FLY]->Render(this->position.x, this->position.y);
 }
 //--------------------------------------------------------------------
 GameIntroScene::GameIntroScene()
@@ -87,10 +87,8 @@ void GameIntroScene::Update(DWORD dt)
 	bat1.Update(dt);
 	bat2.Update(dt);
 	cloud.Update(dt);
-
-	float x, y;
-	Simon::GetInstance()->GetPosition(x, y);
-	if (x <= 122)
+	
+	if (Simon::GetInstance()->GetPosition().x <= 122)
 	{
 		Simon::GetInstance()->SetState(SIMON_STATE_IDLE_TURNBACK);
 
@@ -98,7 +96,7 @@ void GameIntroScene::Update(DWORD dt)
 		bat2.SetSpeed(0, 0);
 		cloud.SetSpeed(0, 0);
 
-		this->SetChangingState(true);
+		//this->SetChangingState(true);
 	}
 }
 
@@ -107,6 +105,7 @@ void GameIntroScene::Initialize()
 	this->isChangeState = false;
 
 	Simon::GetInstance()->SetState(SIMON_STATE_WALKING_LEFT);
+	Simon::GetInstance()->SetPosition(240, 168);
 }
 
 void GameIntroScene::DestroyAll()
@@ -136,6 +135,11 @@ void GameIntroScene::OnKeyUp(int keyCode)
 }
 
 void GameIntroScene::OnKeyDown(int keyCode)
+{
+
+}
+
+void GameIntroScene::KeyState()
 {
 
 }

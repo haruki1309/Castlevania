@@ -11,19 +11,19 @@ private:
 	int cameraWidth, cameraHeight;
 
 	RECT region;
-
 public:
 	ViewPort();
 	~ViewPort();
 
 	D3DXVECTOR3 ConvertPosInViewPort(D3DXVECTOR3 _realPos);
 
-	void SetCameraPos(int x, int y);
+	void SetCameraPos(D3DXVECTOR3 _camPos);
 
 	void SetCameraSize(int _width, int _height) { cameraWidth = _width; cameraHeight = _height; }
 
 	void GetCameraSize(int &_width, int &_height) { _width = cameraWidth; _height = cameraHeight; }
 
 	D3DXVECTOR3 GetCameraPos() { return this->cameraPos; }
+
 };
 

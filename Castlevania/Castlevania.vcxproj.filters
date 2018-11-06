@@ -28,6 +28,9 @@
     <Filter Include="GameObjects">
       <UniqueIdentifier>{2c06cd44-3c58-47cd-9f38-de9f6dd9170e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameObjects\Simon">
+      <UniqueIdentifier>{cb51ebda-19f5-4e30-b028-a7b0ac97cd65}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -66,9 +69,6 @@
     <ClInclude Include="InputDevice.h">
       <Filter>FrameWork\GameComponents</Filter>
     </ClInclude>
-    <ClInclude Include="Simon.h">
-      <Filter>GameObjects</Filter>
-    </ClInclude>
     <ClInclude Include="ViewPort.h">
       <Filter>FrameWork\GameComponents</Filter>
     </ClInclude>
@@ -77,6 +77,12 @@
     </ClInclude>
     <ClInclude Include="GameEntranceScene.h">
       <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Simon.h">
+      <Filter>GameObjects\Simon</Filter>
+    </ClInclude>
+    <ClInclude Include="Whip.h">
+      <Filter>GameObjects\Simon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -113,9 +119,6 @@
     <ClCompile Include="InputDevice.cpp">
       <Filter>FrameWork\GameComponents</Filter>
     </ClCompile>
-    <ClCompile Include="Simon.cpp">
-      <Filter>GameObjects</Filter>
-    </ClCompile>
     <ClCompile Include="ViewPort.cpp">
       <Filter>FrameWork\GameComponents</Filter>
     </ClCompile>
@@ -127,6 +130,12 @@
     </ClCompile>
     <ClCompile Include="GameEntranceScene.cpp">
       <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Simon.cpp">
+      <Filter>GameObjects\Simon</Filter>
+    </ClCompile>
+    <ClCompile Include="Whip.cpp">
+      <Filter>GameObjects\Simon</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

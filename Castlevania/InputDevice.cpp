@@ -19,8 +19,15 @@ InputDevice * InputDevice::GetInstance()
 	return instance;
 }
 
+int InputDevice::IsKeyDown(int keyCode)
+{
+	return (keyStates[keyCode] & 0x80) > 0;
+}
+
+
 bool InputDevice::Initialize(HWND hWnd)
 {
+	// 1 - create a direct input object
 	HRESULT hr = DirectInput8Create(
 		(HINSTANCE)GetWindowLong(hWnd, GWL_HINSTANCE),
 		DIRECTINPUT_VERSION,
@@ -32,7 +39,7 @@ bool InputDevice::Initialize(HWND hWnd)
 	{
 		return false;
 	}
-
+	// 2 - create a direct input device
 	hr = di->CreateDevice(GUID_SysKeyboard, &didv, NULL);
 
 	if (hr != DI_OK)
@@ -40,9 +47,11 @@ bool InputDevice::Initialize(HWND hWnd)
 		return false;
 	}
 
+	// 3 - Set data format - device sent to object
 	hr = didv->SetDataFormat(&c_dfDIKeyboard);
 
-	hr = didv->SetCooperativeLevel(hWnd, DISCL_BACKGROUND | DISCL_NONEXCLUSIVE);
+	// 4 - Set cooperative lvl - work with system - windowed state
+	hr = didv->SetCooperativeLevel(hWnd, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
 
 	DIPROPDWORD dipdw;
 
@@ -52,10 +61,10 @@ bool InputDevice::Initialize(HWND hWnd)
 	dipdw.diph.dwHow = DIPH_DEVICE;
 	dipdw.dwData = KEYBOARD_BUFFER_SIZE; 
 
-	hr = didv->SetProperty(DIPROP_BUFFERSIZE, &dipdw.diph);
+	hr = didv->SetProperty(DIPROP_BUFFERSIZE, &dipdw.diph); // ? 
 
 
-	//Ko acquire duoc
+	// 5 - ready to read data from device
 	hr = didv->Acquire();
 
 	if (hr != DI_OK)
@@ -66,16 +75,14 @@ bool InputDevice::Initialize(HWND hWnd)
 	return true;
 }
 
-int InputDevice::IsKeyDown(int keyCode)
-{
-	return (keyStates[keyCode] & 0x80) > 0;
-}
+
 
 void InputDevice::ProcessKeyBoard()
 {
 	HRESULT hr;
 
 	// Collect all key states first
+	// Check pressed key
 	hr = didv->GetDeviceState(sizeof(keyStates), keyStates);
 	if (FAILED(hr))
 	{
@@ -102,12 +109,13 @@ void InputDevice::ProcessKeyBoard()
 		return;
 	}
 
+
+
 	// Scan through all buffered events, check if the key is pressed or released
 	for (DWORD i = 0; i < dwElements; i++)
 	{
 		int KeyCode = keyEvents[i].dwOfs;
 		int KeyState = keyEvents[i].dwData;
-
  		if ((KeyState & 0x80) > 0)
 		{
 			SceneManager::GetInstance()->GetCurrentScene()->OnKeyDown(KeyCode);
@@ -117,4 +125,6 @@ void InputDevice::ProcessKeyBoard()
 			SceneManager::GetInstance()->GetCurrentScene()->OnKeyUp(KeyCode);
 		}
 	}
+
+	SceneManager::GetInstance()->GetCurrentScene()->KeyState();
 }

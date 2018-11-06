@@ -13,13 +13,10 @@ ViewPort::~ViewPort()
 
 D3DXVECTOR3 ViewPort::ConvertPosInViewPort(D3DXVECTOR3 _realPos)
 {
-	D3DXVECTOR3 temp;
-	return temp;
+	return _realPos - cameraPos;
 }
 
-void ViewPort::SetCameraPos(int x, int y)
+void ViewPort::SetCameraPos(D3DXVECTOR3 _camPos)
 {
-	cameraPos.x = x;
-	cameraPos.y = y;
-	cameraPos.z = 0;
+	cameraPos = _camPos;
 }

@@ -5,7 +5,7 @@ void GameMenuScene::LoadResource()
 	Scene::LoadResource();
 
 	//load image to textures map
-	texturesManager->Add(0, TEX_GAME_MENU, D3DCOLOR_XRGB(255, 255, 255));
+	texturesManager->Add(0, TEX_GAME_MENU, D3DCOLOR_XRGB(128, 0, 0));
 
 	//load sprite to sprites map from textures map
 	spriteManager->Add(0, 2, 2, 258, 226, texturesManager->GetTexture(0), D3DXVECTOR3(0, 0, 0));
@@ -114,6 +114,10 @@ void GameMenuScene::OnKeyDown(int keyCode)
 	}
 }
 
+void GameMenuScene::KeyState()
+{
+
+}
 
 D3DCOLOR GameMenuScene::GetBackColor()
 {

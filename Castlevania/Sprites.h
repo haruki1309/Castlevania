@@ -18,12 +18,19 @@ private:
 
 	D3DXVECTOR3				position;
 
+	bool					isFlipHorizontal;
+	bool					isFlipVertical;
 public:
 	Sprite(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex, D3DXVECTOR3 position);
 
 	void Draw();
 	void Draw(int x, int y);
 	void Draw(D3DXVECTOR3 position, RECT rect);
+
+	void SetFlipHorizontal(bool flag) { isFlipHorizontal = flag; }
+	bool IsFlipHorizontal() { return isFlipHorizontal; }
+	void SetFlipVertical(bool flag) { isFlipVertical = flag; }
+	bool IsFlipVertical() { return isFlipVertical; }
 };
 
 typedef Sprite * LPSPRITE;

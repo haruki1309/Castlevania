@@ -47,6 +47,7 @@ public:
 
 	void OnKeyUp(int keyCode);
 	void OnKeyDown(int keyCode);
+	void KeyState();
 
 	bool GetChangingState() { return Scene::GetChangingState(); }
 	void SetChangingState(bool _isChangeState) { Scene::SetChangingState(_isChangeState); }
