@@ -18,12 +18,6 @@ private:
 
 	HWND hWnd;
 
-	Graphics * graphicsDevice;
-
-	InputDevice * inputDevice;
-
-	SceneManager * sceneManager;
-
 public:
 	bool Initialize(HWND hWnd);
 

@@ -8,9 +8,6 @@
 #include "Define.h"
 
 
-
-Game * myGame;
-
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message) {
@@ -82,18 +79,20 @@ bool CreateGameWindow(HWND & hWnd, HINSTANCE hInstance, int nCmdShow, int Screen
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	HWND hWnd;
-	myGame = new Game();
-
+	
 	if (CreateGameWindow(hWnd, hInstance, nCmdShow, SCREEN_WIDTH, SCREEN_HEIGHT))
 	{
-		myGame = Game::GetInstance();
+		if (!Game::GetInstance()->Initialize(hWnd))
+		{
+			OutputDebugString("[GAME] Init not succeed");
+			return 0;
+		}
 
-		myGame->Initialize(hWnd); // if
+		SceneManager::GetInstance()->LoadScene(GAME_ENTRANCE_SCENE);
 
 		SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH * 2, SCREEN_HEIGHT * 2, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
 
-		myGame->Run();
-		
+		Game::GetInstance()->Run();
 	}
 	return 0;
 }

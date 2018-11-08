@@ -13,19 +13,16 @@ private:
 	int						id;				// Sprite ID in the sprite database
 
 	RECT					sourceRect;
-	LPD3DXSPRITE			spriteHandler;
 	LPDIRECT3DTEXTURE9		texture;
-
-	D3DXVECTOR3				position;
-
 	bool					isFlipHorizontal;
 	bool					isFlipVertical;
 public:
-	Sprite(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex, D3DXVECTOR3 position);
+	Sprite();
+	Sprite(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex);
 
-	void Draw();
-	void Draw(int x, int y);
-	void Draw(D3DXVECTOR3 position, RECT rect);
+	void Draw(float x, float y);
+
+	void Draw(float x, float y, RECT rect);
 
 	void SetFlipHorizontal(bool flag) { isFlipHorizontal = flag; }
 	bool IsFlipHorizontal() { return isFlipHorizontal; }
@@ -43,7 +40,7 @@ class Sprites
 	unordered_map<int, LPSPRITE> sprites;
 
 public:
-	void Add(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex, D3DXVECTOR3 position);
+	void Add(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex);
 	LPSPRITE GetSprite(int id);
 
 	static Sprites * GetInstance();

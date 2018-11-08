@@ -25,6 +25,9 @@ public:
 
 	bool Initialize(HWND hWnd, bool windowed);
 	void Clear(D3DCOLOR color);
+
+	void Render(D3DXVECTOR3 position, LPDIRECT3DTEXTURE9 texture, RECT rect);
+
 	bool Begin();
 	void End();
 	void Present();

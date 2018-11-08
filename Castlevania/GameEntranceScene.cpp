@@ -10,8 +10,6 @@ GameEntranceScene::GameEntranceScene()
 
 	entranceViewPort->SetCameraPos(D3DXVECTOR3(0, 0, 0));
 	entranceViewPort->SetCameraSize(256, 160);
-
-	LoadResource();
 }
 
 
@@ -22,51 +20,45 @@ GameEntranceScene::~GameEntranceScene()
 void GameEntranceScene::KeyState()
 {
 	Simon::GetInstance()->HandleMove();
+
 }
 
 void GameEntranceScene::OnKeyUp(int keyCode)
 {
-	
+	Simon::GetInstance()->HandleEvent(false);
 }
+
 void GameEntranceScene::OnKeyDown(int keyCode)
 {
 	Simon::GetInstance()->HandleEvent(true);
-
-	if (InputDevice::GetInstance()->IsKeyDown(DIK_D))
-	{
-		D3DXVECTOR3 currentCamPos = entranceViewPort->GetCameraPos();
-		currentCamPos.x++;
-		entranceViewPort->SetCameraPos(currentCamPos);
-	}	
 }
-
-
 void GameEntranceScene::Update(DWORD dt)
 {
 	Scene::Update(dt);
 	Simon::GetInstance()->Update(dt);
 
-	D3DXVECTOR3 currentCamPos = entranceViewPort->GetCameraPos();
-	entranceViewPort->SetCameraPos(currentCamPos);
+	D3DXVECTOR3 pos = entranceViewPort->GetCameraPos();
+	pos.x += Simon::GetInstance()->vx * dt;
+	entranceViewPort->SetCameraPos(pos);
+	
 }
 void GameEntranceScene::LoadResource()
 {
-	Scene::LoadResource();
-
-	texturesManager->Add(2, "Resource\\Map\\MapState1_a_TileSet.png", D3DCOLOR_XRGB(0, 0, 0));
-
-	spriteManager->Add(100, 0, 0, 256, 224, texturesManager->GetTexture(2), D3DXVECTOR3(0, 0, 0));
+	Textures::GetInstance()->Add(2, "Resource\\Map\\MapState1_a_TileSet.png", D3DCOLOR_XRGB(255, 0, 255));
+	Sprites::GetInstance()->Add(99, 0, 0, 256, 64, Textures::GetInstance()->GetTexture(2));
 
 	entranceMap->LoadMatrixMap("Resource\\Map\\MapState1_a_TileSet_bg.txt");
+	entranceMap->InitTileSet(Sprites::GetInstance()->GetSprite(99));
+
 }
 void GameEntranceScene::Initialize()
 {
-	entranceMap->InitTileSet(spriteManager->GetSprite(100));
+	LoadResource();
 }
 void GameEntranceScene::Draw()
 {
 	entranceMap->Draw(entranceViewPort);
-	Simon::GetInstance()->Render();
+	Simon::GetInstance()->Render(entranceViewPort);
 }
 void GameEntranceScene::DestroyAll()
 {

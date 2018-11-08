@@ -35,6 +35,8 @@ bool Graphics::Initialize(HWND hWnd, bool  windowed)
 
 	presentationParams.Windowed = windowed;
 	presentationParams.SwapEffect = D3DSWAPEFFECT_DISCARD;
+	presentationParams.BackBufferFormat = D3DFMT_X8R8G8B8;
+	presentationParams.BackBufferCount = 1;
 	presentationParams.hDeviceWindow = hWnd;
 
 	RECT userRect;
@@ -43,10 +45,23 @@ bool Graphics::Initialize(HWND hWnd, bool  windowed)
 	presentationParams.BackBufferHeight = userRect.bottom + 1;
 	presentationParams.BackBufferWidth = userRect.right + 1;
 
+	D3DCAPS9 caps;
+	DWORD behavior;
+	HRESULT result = direct3d->GetDeviceCaps(D3DADAPTER_DEFAULT,
+		D3DDEVTYPE_HAL, &caps);
+
+	if ((caps.DevCaps & D3DDEVCAPS_HWTRANSFORMANDLIGHT) == 0 ||
+		caps.VertexShaderVersion < D3DVS_VERSION(1, 1))
+		// Use software-only processing
+		behavior = D3DCREATE_SOFTWARE_VERTEXPROCESSING;
+	else
+		// Use hardware-only processing
+		behavior = D3DCREATE_HARDWARE_VERTEXPROCESSING;
+
 	if (!SUCCEEDED(direct3d->CreateDevice(D3DADAPTER_DEFAULT, //Adapter mac dinh
 		D3DDEVTYPE_HAL, //Device Type: High Speed Graphic Card
 		hWnd,
-		D3DCREATE_MIXED_VERTEXPROCESSING,
+		behavior,
 		&presentationParams,
 		&device)))
 	{
@@ -55,7 +70,7 @@ bool Graphics::Initialize(HWND hWnd, bool  windowed)
 
 	device->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &backBuffer);
 
-	D3DXCreateSprite(Graphics::GetInstance()->device, &spriteHandler);
+	D3DXCreateSprite(device, &spriteHandler);
 
 	return true;
 }
@@ -63,6 +78,18 @@ bool Graphics::Initialize(HWND hWnd, bool  windowed)
 void Graphics::Clear(D3DCOLOR color)
 {
 	device->Clear(0, NULL, D3DCLEAR_TARGET, color, 1.0f, 0);
+}
+
+void Graphics::Render(D3DXVECTOR3 position, LPDIRECT3DTEXTURE9 texture, RECT rect)
+{
+	if (spriteHandler)
+	{
+		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
+
+		spriteHandler->Draw(texture, &rect, NULL, &position, D3DCOLOR_XRGB(255, 255, 255));
+
+		spriteHandler->End();
+	}
 }
 
 bool Graphics::Begin()

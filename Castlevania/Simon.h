@@ -3,6 +3,7 @@
 #include "InputDevice.h"
 #include "Whip.h"
 
+
 #define TEX_SIMON "Resource\\Simon.png"
 
 
@@ -60,7 +61,9 @@ private:
 
 	Whip * whip;
 	
+	int time;
 
+	int attackSpeed;
 public:
 	Simon();
 	~Simon();
@@ -69,7 +72,7 @@ public:
 	void LoadResource();
 
 	void Update(DWORD dt);
-	void Render();
+	void Render(ViewPort * camera);
 	void SetState(int state);
 
 	void HandleMove();

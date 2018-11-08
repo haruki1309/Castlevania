@@ -1,4 +1,5 @@
 #include "TileMap.h"
+#include "Textures.h"
 
 TileMap::TileMap()
 {
@@ -18,9 +19,7 @@ TileMap::TileMap(int _cols, int _rows, int _tileWidth, int _tileHeight)
 	{
 		matrix[i] = new int[cols];
 	}
-	
 }
-
 
 TileMap::~TileMap()
 {
@@ -33,7 +32,7 @@ TileMap::~TileMap()
 		delete matrix;
 		matrix = nullptr;
 	}
-}
+}  
 
 void TileMap::InitTileSet(Sprite * _tileSet)
 {
@@ -93,21 +92,18 @@ void TileMap::LoadMatrixMap(LPCSTR fileSource)
 		countLine++;
 	}
 }
-
 void TileMap::Draw(ViewPort *viewPort)
 {
-	D3DXVECTOR3 cameraPos = viewPort->GetCameraPos();
-	D3DXVECTOR3 tilePos;
 	RECT tileRect;
+	D3DXVECTOR3 tilePos;
+	int cameraWidth, cameraHeight;	
 
-	int cameraWidth, cameraHeight;
 	viewPort->GetCameraSize(cameraWidth, cameraHeight);
 
-	int colStart = (int)cameraPos.x / tileWidth;
-	int colEnd = ((int)cameraPos.x + cameraWidth) / tileWidth < cols - 1 ? ((int)cameraPos.x + cameraWidth) / tileWidth : cols - 1;
-	int rowStart = (int)cameraPos.y % 40 / tileHeight;
-	int rowEnd = ((int)cameraPos.y % 40  + cameraHeight) / tileHeight < rows - 1 ? ((int)cameraPos.y % 40 + cameraHeight) / tileHeight : rows - 1;
-
+	int colStart = (int)viewPort->GetCameraPos().x / tileWidth;
+	int colEnd = ((int)viewPort->GetCameraPos().x + cameraWidth) / tileWidth < cols - 1 ? ((int)viewPort->GetCameraPos().x + cameraWidth) / tileWidth : cols - 1;
+	int rowStart = (int)viewPort->GetCameraPos().y/ tileHeight;
+	int rowEnd = ((int)viewPort->GetCameraPos().y + cameraHeight) / tileHeight < rows - 1 ? ((int)viewPort->GetCameraPos().y + cameraHeight) / tileHeight : rows - 1;
 	
 	for (int i = rowStart; i <= rowEnd; i++)
 	{
@@ -122,7 +118,8 @@ void TileMap::Draw(ViewPort *viewPort)
 
 			tilePos = viewPort->ConvertPosInViewPort(tilePos);
 
-			tileSet->Draw(tilePos, tileRect);
+			tileSet->Draw(tilePos.x, tilePos.y, tileRect);
+
 		}
 	}
 }

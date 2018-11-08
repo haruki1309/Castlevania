@@ -60,8 +60,8 @@ void SceneManager::LoadScene(int sceneID)
 		break;
 	case GAME_ENTRANCE_SCENE:
 		currentScene = new GameEntranceScene();
-		this->sceneID = sceneID;
 		currentScene->Initialize();
+		this->sceneID = sceneID;
 		break;
 	}
 

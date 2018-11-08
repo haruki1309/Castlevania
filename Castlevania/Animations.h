@@ -38,7 +38,6 @@ class Animation
 public:
 	Animation(int defaultTime) { this->defaultTime = defaultTime; lastFrameTime = -1; currentFrame = -1; }
 	void Add(int spriteId, DWORD time = 0);
-	void Render();
 	void Render(int x, int y);
 
 	int GetCurrentFrame() { return currentFrame; }

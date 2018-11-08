@@ -1,8 +1,11 @@
 #include "Sprites.h"
 
-
 //Structure of Sprite
-Sprite::Sprite(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex, D3DXVECTOR3 position)
+Sprite::Sprite()
+{
+
+}
+Sprite::Sprite(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex)
 {
 	this->id = id;
 
@@ -12,50 +15,18 @@ Sprite::Sprite(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTU
 	this->sourceRect.bottom = bottom;
 
 	this->texture = tex;
-	this->spriteHandler = NULL;
-	this->spriteHandler = Graphics::GetInstance()->GetSpriteHandler();
-	this->position = position;
-
 }
 
-void Sprite::Draw()
+void Sprite::Draw(float x, float y)
 {
-	if (spriteHandler)
-	{
-		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
-
-		spriteHandler->Draw(this->texture, &sourceRect, NULL, &position, D3DCOLOR_XRGB(255, 255, 255));
-
-		spriteHandler->End();
-	}
-	
-}
-void Sprite::Draw(int x, int y)
-{
-	if (spriteHandler)
-	{
-		position.x = x;
-		position.y = y;
-		position.z = 0;
-
-		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
-
-		spriteHandler->Draw(this->texture, &sourceRect, NULL, &position, D3DCOLOR_XRGB(255, 255, 255));
-
-		spriteHandler->End();
-	}
+	D3DXVECTOR3 pos = D3DXVECTOR3(x, y, 0);
+	Graphics::GetInstance()->Render(pos, texture, sourceRect);
 }
 
-void Sprite::Draw(D3DXVECTOR3 _position, RECT _rect)
+void Sprite::Draw(float x, float y, RECT rect)
 {
-	position = _position;
-	sourceRect = _rect;
-
-	spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
-
-	spriteHandler->Draw(this->texture, &sourceRect, NULL, &position, D3DCOLOR_XRGB(255, 255, 255));
-
-	spriteHandler->End();
+	D3DXVECTOR3 pos = D3DXVECTOR3(x, y, 0);
+	Graphics::GetInstance()->Render(pos, texture, rect);
 }
 
 //Manage All Sprite:
@@ -68,9 +39,9 @@ Sprites *Sprites::GetInstance()
 	return instance;
 }
 
-void Sprites::Add(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex, D3DXVECTOR3 position)
+void Sprites::Add(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex)
 {
-	LPSPRITE s = new Sprite(id, left, top, right, bottom, tex, position);
+	LPSPRITE s = new Sprite(id, left, top, right, bottom, tex);
 	sprites[id] = s;
 }
 

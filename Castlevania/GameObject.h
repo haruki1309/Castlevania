@@ -5,7 +5,7 @@
 #include <vector>
 #include"Animations.h"
 #include "Sprites.h"
-
+#include "ViewPort.h"
 
 using namespace std;
 
@@ -44,7 +44,7 @@ public:
 	void AddAnimation(int aniId);
 
 	virtual void Update(DWORD dt);
-	virtual void Render() = 0;
+	virtual void Render(ViewPort * camera) = 0;
 	virtual void SetState(int state) { this->state = state; }
 
 	GameObject();

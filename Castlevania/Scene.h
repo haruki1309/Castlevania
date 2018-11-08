@@ -12,10 +12,6 @@ class Scene
 protected:
 	D3DCOLOR backColor;
 
-	Textures * texturesManager;
-	Sprites * spriteManager;
-	Animations * animationManager;
-
 	bool isChangeState;
 
 public:

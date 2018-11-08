@@ -13,7 +13,7 @@ class Bat : public GameObject
 {
 public:
 	void Update(DWORD dt);
-	void Render();
+	void Render(ViewPort * camera);
 	void SetState(int state) { this->state = state; }
 };
 
@@ -23,7 +23,7 @@ class Cloud : public GameObject
 {
 public:
 	void Update(DWORD dt);
-	void Render();
+	void Render(ViewPort * camera);
 	void SetState(int state) { this->state = state; }
 };
 

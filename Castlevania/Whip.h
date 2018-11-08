@@ -32,7 +32,7 @@ public:
 
 	void SetType(int _type) { type = _type; }
 
-	void Render();
+	void Render(ViewPort * camera);
 
 	int GetCurrentFrame() { return animations[type]->GetCurrentFrame(); }
 };

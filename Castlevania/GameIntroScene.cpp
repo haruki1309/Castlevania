@@ -4,9 +4,11 @@
 void Bat::Update(DWORD dt)
 {
 	GameObject::Update(dt);
+	this->position.x += vx * dt;
+	this->position.y += vy * dt;
 }
 
-void Bat::Render()
+void Bat::Render(ViewPort * camera)
 {
 	this->animations[BAT_ANI_FLY]->Render(this->position.x, this->position.y);
 }
@@ -14,19 +16,17 @@ void Bat::Render()
 void Cloud::Update(DWORD dt)
 {
 	GameObject::Update(dt);
+	this->position.x += vx * dt;
+	this->position.y += vy * dt;
 }
 
-void Cloud::Render()
+void Cloud::Render(ViewPort * camera)
 {
 	this->animations[CLOUD_ANI_FLY]->Render(this->position.x, this->position.y);
 }
 //--------------------------------------------------------------------
 GameIntroScene::GameIntroScene()
 {
-	this->texturesManager = new Textures(); //may cai nay chac khong can, t se chuyen thanh lay truc tiep luon
-	this->spriteManager = new Sprites();
-	this->animationManager = new Animations();
-
 	bat1.SetPosition(36, 125);
 	bat2.SetPosition(144, 62);
 	cloud.SetPosition(215, 70);
@@ -48,34 +48,31 @@ GameIntroScene::~GameIntroScene()
 
 void GameIntroScene::LoadResource()
 {
-	Scene::LoadResource();
-
-	texturesManager->Add(1, TEX_GAME_INTRO, D3DCOLOR_XRGB(128, 0, 0));
+	Textures::GetInstance()->Add(1, TEX_GAME_INTRO, D3DCOLOR_XRGB(128, 0, 0));
 	//background
-	spriteManager->Add(50, 6, 6, 262, 230, texturesManager->GetTexture(1), D3DXVECTOR3(0, 0, 0));
+	Sprites::GetInstance()->Add(50, 6, 6, 262, 230, Textures::GetInstance()->GetTexture(1));
 
 	//bat
-	D3DXVECTOR3 batPos = D3DXVECTOR3(238, 170, 0);
-	spriteManager->Add(51, 287, 102, 295, 109, texturesManager->GetTexture(1), batPos);
-	spriteManager->Add(52, 274, 102, 282, 110, texturesManager->GetTexture(1), batPos);
-	
+	Sprites::GetInstance()->Add(51, 287, 102, 295, 109, Textures::GetInstance()->GetTexture(1));
+	Sprites::GetInstance()->Add(52, 274, 102, 282, 110, Textures::GetInstance()->GetTexture(1));
+
 
 	LPANIMATION aniBatFly = new Animation(50);
 	aniBatFly->Add(51);
 	aniBatFly->Add(52);
 
-	animationManager->Add(2, aniBatFly);
-	bat1.AddAnimation(2);
-	bat2.AddAnimation(2);
+	Animations::GetInstance()->Add(2, aniBatFly);
 
 	//cloud :) 
-	spriteManager->Add(53, 268, 78, 300, 92, texturesManager->GetTexture(1), D3DXVECTOR3(0, 0, 0));
+	Sprites::GetInstance()->Add(53, 268, 78, 300, 92, Textures::GetInstance()->GetTexture(1));
 	LPANIMATION aniCloudFly = new Animation(120);
 	aniCloudFly->Add(53);
-	animationManager->Add(3, aniCloudFly);
+	Animations::GetInstance()->Add(3, aniCloudFly);
+
+
+	bat1.AddAnimation(2);
+	bat2.AddAnimation(2);
 	cloud.AddAnimation(3);
-
-
 }
 
 void GameIntroScene::Update(DWORD dt)
@@ -105,7 +102,8 @@ void GameIntroScene::Initialize()
 	this->isChangeState = false;
 
 	Simon::GetInstance()->SetState(SIMON_STATE_WALKING_LEFT);
-	Simon::GetInstance()->SetPosition(240, 168);
+	Simon::GetInstance()->SetPosition(240.0f, 168.0f);
+	Simon::GetInstance()->SetSpeed(-0.03f, 0);
 }
 
 void GameIntroScene::DestroyAll()
@@ -115,13 +113,11 @@ void GameIntroScene::DestroyAll()
 
 void GameIntroScene::Draw()
 {
-	spriteManager->GetSprite(50)->Draw();
-
-	Simon::GetInstance()->Render();
-
-	bat1.Render();
-	bat2.Render();
-	cloud.Render();
+	Sprites::GetInstance()->GetSprite(50)->Draw(0, 0);
+	Simon::GetInstance()->Render(NULL);
+	bat1.Render(NULL);
+	bat2.Render(NULL);
+	cloud.Render(NULL);
 }
 
 D3DCOLOR GameIntroScene::GetBackColor()

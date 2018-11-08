@@ -21,40 +21,34 @@ Game *Game::GetInstance()
 
 bool Game::Initialize(HWND hWnd)
 {
-	graphicsDevice = Graphics::GetInstance();
-
-	inputDevice = InputDevice::GetInstance();
-
 	this->hWnd = hWnd;
 
-	if(!graphicsDevice->Initialize(this->hWnd, GAME_WINDOWED) || !inputDevice->Initialize(this->hWnd))
+	if (!Graphics::GetInstance()->Initialize(this->hWnd, GAME_WINDOWED) || !InputDevice::GetInstance()->Initialize(this->hWnd))
 	{
 		return false;
 	}
-	sceneManager = SceneManager::GetInstance();
-	sceneManager->LoadScene(GAME_ENTRANCE_SCENE);
 	return true;
 }
 
 void Game::Update(DWORD gameTime)
 {
-	sceneManager->Update(gameTime);
+	SceneManager::GetInstance()->Update(gameTime);
 }
 
 void Game::Render(DWORD gameTime)
 {
-	graphicsDevice->Clear(D3DCOLOR_XRGB(0, 0, 0));
+	Graphics::GetInstance()->Clear(D3DCOLOR_XRGB(0, 0, 0));
 
-	if (graphicsDevice->Begin())
+	if (Graphics::GetInstance()->Begin())
 	{
-		graphicsDevice->device->ColorFill(graphicsDevice->GetBackBuffer(), NULL, D3DCOLOR_XRGB(0, 0, 0));
+		Graphics::GetInstance()->device->ColorFill(Graphics::GetInstance()->GetBackBuffer(), NULL, D3DCOLOR_XRGB(0, 0, 0));
 
-		sceneManager->GetCurrentScene()->Draw();
+		SceneManager::GetInstance()->GetCurrentScene()->Draw();
 
-		graphicsDevice->End();
+		Graphics::GetInstance()->End();
 	}
 
-	graphicsDevice->Present(); // !!!
+	Graphics::GetInstance()->Present(); // !!!
 	
 }
 
@@ -85,7 +79,7 @@ void Game::Run()
 		{
 			frameStart = now;
 
-			inputDevice->ProcessKeyBoard();
+			InputDevice::GetInstance()->ProcessKeyBoard();
 
 			Update(dt);
 

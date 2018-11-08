@@ -12,14 +12,14 @@ private:
 	int ** matrix;
 	int cols, rows;
 	int tileWidth, tileHeight;
+
 	Sprite * tileSet;
 
 public:
 	TileMap();
 	TileMap(int _cols, int _rows, int _tileWidth, int _tileHeight);
 	~TileMap();
-
-	void InitTileSet(Sprite * tileSet);
+	void InitTileSet(Sprite * _tileSet);
 	void LoadMatrixMap(LPCSTR fileSource);
 	void Draw(ViewPort *viewPort);
 
