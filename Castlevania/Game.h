@@ -5,7 +5,7 @@
 #include "Graphics.h"
 #include "InputDevice.h"
 #include "SceneManager.h"
-
+#include "Database.h"
 
 
 #define GAME_WINDOWED true

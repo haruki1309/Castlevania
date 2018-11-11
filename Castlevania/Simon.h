@@ -3,24 +3,23 @@
 #include "InputDevice.h"
 #include "Whip.h"
 
-
 #define TEX_SIMON "Resource\\Simon.png"
 
 
-#define SIMON_WALKING_SPEED 0.06f
-#define SIMON_JUMP_SPEED_Y 0.22f
-#define SIMON_GRAVITY 0.018f
+#define SIMON_WALKING_SPEED							0.06f
+#define SIMON_JUMP_SPEED_Y							0.22f
+#define SIMON_GRAVITY								0.018f
 
-#define SIMON_STATE_IDLE_TURNBACK -100
-#define SIMON_STATE_IDLE 0
-#define SIMON_STATE_WALKING_RIGHT 100
-#define SIMON_STATE_WALKING_LEFT 200
-#define SIMON_STATE_JUMP 300
-#define SIMON_STATE_SIT 400
-#define SIMON_STATE_ATTACK 500
-#define SIMON_STATE_CANCEL_ATTACK 600
+#define SIMON_STATE_IDLE_TURNBACK					-100
+#define SIMON_STATE_IDLE							0
+#define SIMON_STATE_WALKING_RIGHT					100
+#define SIMON_STATE_WALKING_LEFT					200
+#define SIMON_STATE_JUMP							300
+#define SIMON_STATE_SIT								400
+#define SIMON_STATE_ATTACK							500
+#define SIMON_STATE_CANCEL_ATTACK					600
 
-//----------------------------------------------------
+
 #define SIMON_ANI_IDLE_TURNBACK						0
 #define SIMON_ANI_SIT_LEFT							1
 #define SIMON_ANI_IDLE_LEFT							2
@@ -33,9 +32,8 @@
 #define SIMON_ANI_UPSTAIRS_ATTACK_LEFT				8
 #define SIMON_ANI_DOWNSTAIRS_ATTACK_LEFT			9
 
-#define SIMON_ANI_STAND_GET_SPITEM_LEFT				10	
+#define SIMON_ANI_STAND_GET_SPITEM_LEFT				10
 
-//------------------------------------------------------
 #define SIMON_ANI_SIT_RIGHT							11
 #define SIMON_ANI_IDLE_RIGHT						12
 #define SIMON_ANI_WALKING_RIGHT						13
@@ -48,7 +46,6 @@
 #define SIMON_ANI_DOWNSTAIRS_ATTACK_RIGHT			19
 
 #define SIMON_ANI_STAND_GET_SPITEM_RIGHT			20	
-
 //--------------------------------------------------------
 
 class Simon : public GameObject
@@ -61,15 +58,20 @@ private:
 
 	Whip * whip;
 	
+	int totalWhip;
+	int totalSubWeapon;
+
 	int time;
 
 	int attackSpeed;
+
+	D3DXVECTOR3 info; // hp, energy, life
 public:
 	Simon();
 	~Simon();
 	static Simon * GetInstance();
 
-	void LoadResource();
+	void LoadAnimation();
 
 	void Update(DWORD dt);
 	void Render(ViewPort * camera);
@@ -83,6 +85,9 @@ public:
 	void Jump(DWORD dt);
 	void Sit(DWORD dt);
 	void Attack(DWORD dt);
+
+	void SetInfo(D3DXVECTOR3 _info) { info = _info; }
+	D3DXVECTOR3 GetInfo() { return info; }
 
 };
 

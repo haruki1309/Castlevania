@@ -2,16 +2,15 @@
 #include "Textures.h"
 #include "Animations.h"
 
-//sprite simon bat dau tu -200
-
 Simon * Simon::_instance = NULL;
 
 Simon::Simon()
 {
 	whip = Whip::GetInstance();
+	whip->SetType(NOMAL_WHIP);
 	attackSpeed = 100;
+	info = D3DXVECTOR3(16, 5, 3);
 	SetState(SIMON_STATE_IDLE);
-	LoadResource();
 }
 
 Simon::~Simon()
@@ -24,229 +23,50 @@ Simon * Simon::GetInstance()
 	return _instance;
 }
 
-void Simon::LoadResource()
+void Simon::LoadAnimation()
 {
-	Textures::GetInstance()->Add(-1, TEX_SIMON, D3DCOLOR_XRGB(0, 128, 128));
+	AddAnimation(-50); // 0 animation turn back
 
-	D3DXVECTOR3 simonPos = D3DXVECTOR3(0, 0, 0); //cho nay sai
-	//turn back
-	Sprites::GetInstance()->Add(-201, 249, 7, 265, 39, Textures::GetInstance()->GetTexture(-1));
+	AddAnimation(-49); // 1 animation sit left
 
-	LPANIMATION aniTurningBack = new Animation(120);
-	aniTurningBack->Add(-201);
-	Animations::GetInstance()->Add(-50, aniTurningBack);
-	this->AddAnimation(-50); // 0 animation turn back
+	AddAnimation(-48); // 2 animation idle left
 
-	//sit left
-	Sprites::GetInstance()->Add(-200, 87, 7, 103, 39, Textures::GetInstance()->GetTexture(-1));
+	AddAnimation(-47); //3 animation walking left
 
-	LPANIMATION aniSitLeft = new Animation(120);
-	aniSitLeft->Add(-200);
-	Animations::GetInstance()->Add(-49, aniSitLeft);
-	this->AddAnimation(-49); // 1 animation sit left
+	AddAnimation(-46); // 4 animation upstairs left
 
-	//idle left + walking left
-	Sprites::GetInstance()->Add(-199, 4, 7, 20, 39, Textures::GetInstance()->GetTexture(-1));
-	Sprites::GetInstance()->Add(-198, 29, 7, 45, 39, Textures::GetInstance()->GetTexture(-1));
-	Sprites::GetInstance()->Add(-197, 58, 7, 74, 39, Textures::GetInstance()->GetTexture(-1));
+	AddAnimation(-45); // 5 animation downstairs left
 
-	LPANIMATION aniIdleLeft = new Animation(100);
-	aniIdleLeft->Add(-199);
-	Animations::GetInstance()->Add(-48, aniIdleLeft);
-	this->AddAnimation(-48); // 2 animation idle left
+	AddAnimation(-44); // 6 animation stand attack left
 
+	AddAnimation(-43); // 7 animation sit attack left
 
-	LPANIMATION aniWalkingLeft = new Animation(100);
-	aniWalkingLeft->Add(-199);
-	aniWalkingLeft->Add(-198);
-	aniWalkingLeft->Add(-197);
-	aniWalkingLeft->Add(-198);
-	Animations::GetInstance()->Add(-47, aniWalkingLeft);
-	this->AddAnimation(-47); //3 animation walking left
+	AddAnimation(-42); // 8 animation upstairs attack left
 
-	//upstairs left
-	Sprites::GetInstance()->Add(-196, 156, 7, 172, 39, Textures::GetInstance()->GetTexture(-1));
-	LPANIMATION aniUpstairLeft = new Animation(120);
-	aniUpstairLeft->Add(-196);
-	aniUpstairLeft->Add(-198);
-	Animations::GetInstance()->Add(-46, aniUpstairLeft);
-	this->AddAnimation(-46); // 4 animation upstairs left
+	AddAnimation(-41); // 9 animation downstairs attack left
 
-	//downstairs left
-	Sprites::GetInstance()->Add(-195, 131, 7, 147, 39, Textures::GetInstance()->GetTexture(-1));
-	LPANIMATION aniDownstairLeft = new Animation(120);
-	aniDownstairLeft->Add(-195);
-	aniDownstairLeft->Add(-198);
-	Animations::GetInstance()->Add(-45, aniDownstairLeft);
-	this->AddAnimation(-45); // 5 animation downstairs left
-
-	//stand attack left
-	Sprites::GetInstance()->Add(-194, 27, 46, 43, 78, Textures::GetInstance()->GetTexture(-1));
-	Sprites::GetInstance()->Add(-193, 58, 46, 74, 78, Textures::GetInstance()->GetTexture(-1));
-	Sprites::GetInstance()->Add(-192, 88, 46, 104, 78, Textures::GetInstance()->GetTexture(-1));
-
-	LPANIMATION aniStandAttackLeft = new Animation(attackSpeed);
-	aniStandAttackLeft->Add(-194);
-	aniStandAttackLeft->Add(-193);
-	aniStandAttackLeft->Add(-192, 200);
-	Animations::GetInstance()->Add(-44, aniStandAttackLeft);
-	this->AddAnimation(-44); // 6 animation stand attack left
-
-	//sit attack left
-	Sprites::GetInstance()->Add(-191, 26, 91, 42, 123, Textures::GetInstance()->GetTexture(-1));
-	Sprites::GetInstance()->Add(-190, 55, 91, 71, 123, Textures::GetInstance()->GetTexture(-1));
-	Sprites::GetInstance()->Add(-189, 85, 91, 101, 123, Textures::GetInstance()->GetTexture(-1));
-
-	LPANIMATION aniSitAttackLeft = new Animation(attackSpeed);
-	aniSitAttackLeft->Add(-191);
-	aniSitAttackLeft->Add(-190);
-	aniSitAttackLeft->Add(-189, 200);
-	Animations::GetInstance()->Add(-43, aniSitAttackLeft);
-	this->AddAnimation(-43); // 7 animation sit attack left
-
-	//upstairs attack left
-	Sprites::GetInstance()->Add(-188, 129, 47, 145, 79, Textures::GetInstance()->GetTexture(-1));
-	Sprites::GetInstance()->Add(-187, 159, 47, 175, 79, Textures::GetInstance()->GetTexture(-1));
-	Sprites::GetInstance()->Add(-186, 194, 47, 210, 79, Textures::GetInstance()->GetTexture(-1));
-
-	LPANIMATION aniUpStairsAttackLeft = new Animation(attackSpeed);
-	aniUpStairsAttackLeft->Add(-188);
-	aniUpStairsAttackLeft->Add(-187);
-	aniUpStairsAttackLeft->Add(-186, 200);
-	Animations::GetInstance()->Add(-42, aniUpStairsAttackLeft);
-	this->AddAnimation(-42); // 8 animation upstairs attack left
-
-	//downstairs attack left
-	Sprites::GetInstance()->Add(-185, 129, 91, 145, 123, Textures::GetInstance()->GetTexture(-1));
-	Sprites::GetInstance()->Add(-184, 158, 91, 174, 123, Textures::GetInstance()->GetTexture(-1));
-	Sprites::GetInstance()->Add(-183, 194, 91, 210, 123, Textures::GetInstance()->GetTexture(-1));
-
-	LPANIMATION aniDownStairsAttackLeft = new Animation(attackSpeed);
-	aniDownStairsAttackLeft->Add(-185);
-	aniDownStairsAttackLeft->Add(-184);
-	aniDownStairsAttackLeft->Add(-183, 200);
-	Animations::GetInstance()->Add(-41, aniDownStairsAttackLeft);
-	this->AddAnimation(-41); // 9 animation downstairs attack left
-
-	//eat sp item left
-	Sprites::GetInstance()->Add(-182, 228, 89, 224, 121, Textures::GetInstance()->GetTexture(-1));
-	Sprites::GetInstance()->Add(-181, 252, 89, 268, 121, Textures::GetInstance()->GetTexture(-1));
-	Sprites::GetInstance()->Add(-180, 227, 47, 243, 79, Textures::GetInstance()->GetTexture(-1));
-	Sprites::GetInstance()->Add(-179, 249, 47, 265, 79, Textures::GetInstance()->GetTexture(-1));
-
-	LPANIMATION aniEatSpItemLeft = new Animation(120);
-	aniEatSpItemLeft->Add(-182);
-	aniEatSpItemLeft->Add(-181);
-	aniEatSpItemLeft->Add(-180);
-	aniEatSpItemLeft->Add(-179);
-	Animations::GetInstance()->Add(-40, aniEatSpItemLeft);
-	this->AddAnimation(-40); // 10 animation eat sp item attack left
+	AddAnimation(-40); // 10 animation eat sp item attack left
 
 	//======================================================================
-	//sit right
-	Sprites::GetInstance()->Add(-178, 172, 136, 188, 168, Textures::GetInstance()->GetTexture(-1));
+	AddAnimation(-39); // 11 animation sit right
 
-	LPANIMATION aniSitRight = new Animation(120);
-	aniSitRight->Add(-178);
-	Animations::GetInstance()->Add(-39, aniSitRight);
-	this->AddAnimation(-39); // 11 animation sit right
+	AddAnimation(-38); // 12 animation idle right
 
-	//idle right + walking right
-	Sprites::GetInstance()->Add(-177, 255, 136, 271, 168, Textures::GetInstance()->GetTexture(-1));
-	Sprites::GetInstance()->Add(-176, 230, 136, 247, 168, Textures::GetInstance()->GetTexture(-1));
-	Sprites::GetInstance()->Add(-175, 201, 136, 217, 168, Textures::GetInstance()->GetTexture(-1));
+	AddAnimation(-37); // 13 animation walking right
 
-	LPANIMATION aniIdleRight = new Animation(120);
-	aniIdleRight->Add(-177);
-	Animations::GetInstance()->Add(-38, aniIdleRight);
-	this->AddAnimation(-38); // 12 animation idle right
+	AddAnimation(-36); // 14 animation upstairs right
 
+	AddAnimation(-35); // 15 animation downstairs right
 
-	LPANIMATION aniWalkingRight = new Animation(100);
-	aniWalkingRight->Add(-177);
-	aniWalkingRight->Add(-176);
-	aniWalkingRight->Add(-175);
-	aniWalkingRight->Add(-176);
-	Animations::GetInstance()->Add(-37, aniWalkingRight);
-	this->AddAnimation(-37); // 13 animation walking right
+	AddAnimation(-34); // 16 animation stand attack right
 
-	//upstairs right
-	Sprites::GetInstance()->Add(-174, 103, 136, 119, 168, Textures::GetInstance()->GetTexture(-1));
-	LPANIMATION aniUpstairRight = new Animation(120);
-	aniUpstairRight->Add(-174);
-	aniUpstairRight->Add(-176);
-	Animations::GetInstance()->Add(-36, aniUpstairRight);
-	this->AddAnimation(-36); // 14 animation upstairs right
+	AddAnimation(-33); // 17 animation sit attack right
 
-	//downstairs right
-	Sprites::GetInstance()->Add(-173, 128, 136, 145, 168, Textures::GetInstance()->GetTexture(-1));
-	LPANIMATION aniDownstairRight = new Animation(120);
-	aniDownstairRight->Add(-173);
-	aniDownstairRight->Add(-176);
-	Animations::GetInstance()->Add(-35, aniDownstairRight);
-	this->AddAnimation(-35); // 15 animation downstairs right
+	AddAnimation(-32); // 18 animation upstairs attack right
 
-	//stand attack right
-	Sprites::GetInstance()->Add(-172, 232, 175, 248, 207, Textures::GetInstance()->GetTexture(-1));
-	Sprites::GetInstance()->Add(-171, 201, 175, 217, 207, Textures::GetInstance()->GetTexture(-1));
-	Sprites::GetInstance()->Add(-170, 171, 175, 187, 207, Textures::GetInstance()->GetTexture(-1));
+	AddAnimation(-31); // 19 animation downstairs attack right
 
-	LPANIMATION aniStandAttackRight = new Animation(attackSpeed);
-	aniStandAttackRight->Add(-172);
-	aniStandAttackRight->Add(-171);
-	aniStandAttackRight->Add(-170, 200);
-	Animations::GetInstance()->Add(-34, aniStandAttackRight);
-	this->AddAnimation(-34); // 16 animation stand attack right
-
-	//sit attack right
-	Sprites::GetInstance()->Add(-169, 233, 220, 249, 252, Textures::GetInstance()->GetTexture(-1));
-	Sprites::GetInstance()->Add(-168, 204, 220, 220, 252, Textures::GetInstance()->GetTexture(-1));
-	Sprites::GetInstance()->Add(-167, 174, 220, 190, 252, Textures::GetInstance()->GetTexture(-1));
-
-	LPANIMATION aniSitAttackRight = new Animation(attackSpeed);
-	aniSitAttackRight->Add(-169);
-	aniSitAttackRight->Add(-168);
-	aniSitAttackRight->Add(-167, 200);
-	Animations::GetInstance()->Add(-33, aniSitAttackRight);
-	this->AddAnimation(-33); // 17 animation sit attack right
-
-	//upstairs attack right
-	Sprites::GetInstance()->Add(-166, 130, 176, 146, 208, Textures::GetInstance()->GetTexture(-1));
-	Sprites::GetInstance()->Add(-165, 100, 176, 116, 208, Textures::GetInstance()->GetTexture(-1));
-	Sprites::GetInstance()->Add(-164, 65, 176, 81, 208, Textures::GetInstance()->GetTexture(-1));
-
-	LPANIMATION aniUpStairsAttackRight = new Animation(attackSpeed);
-	aniUpStairsAttackRight->Add(-166);
-	aniUpStairsAttackRight->Add(-165);
-	aniUpStairsAttackRight->Add(-164, 200);
-	Animations::GetInstance()->Add(-32, aniUpStairsAttackRight);
-	this->AddAnimation(-32); // 18 animation upstairs attack right
-
-	//downstairs attack right
-	Sprites::GetInstance()->Add(-163, 130, 220, 146, 252, Textures::GetInstance()->GetTexture(-1));
-	Sprites::GetInstance()->Add(-162, 101, 220, 117, 252, Textures::GetInstance()->GetTexture(-1));
-	Sprites::GetInstance()->Add(-161, 65, 220, 81, 252, Textures::GetInstance()->GetTexture(-1));
-
-	LPANIMATION aniDownStairsAttackRight = new Animation(attackSpeed);
-	aniDownStairsAttackRight->Add(-163);
-	aniDownStairsAttackRight->Add(-162);
-	aniDownStairsAttackRight->Add(-161, 200);
-	Animations::GetInstance()->Add(-31, aniDownStairsAttackRight);
-	this->AddAnimation(-31); // 19 animation downstairs attack right
-
-	//eat sp item right
-	Sprites::GetInstance()->Add(-160, 31, 218, 47, 250, Textures::GetInstance()->GetTexture(-1));
-	Sprites::GetInstance()->Add(-159, 7, 218, 23, 250, Textures::GetInstance()->GetTexture(-1));
-	Sprites::GetInstance()->Add(-158, 32, 176, 48, 208, Textures::GetInstance()->GetTexture(-1));
-	Sprites::GetInstance()->Add(-157, 10, 176, 26, 208, Textures::GetInstance()->GetTexture(-1));
-
-	LPANIMATION aniEatSpItemRight = new Animation(120);
-	aniEatSpItemRight->Add(-160);
-	aniEatSpItemRight->Add(-159);
-	aniEatSpItemRight->Add(-158);
-	aniEatSpItemRight->Add(-157);
-	Animations::GetInstance()->Add(-30, aniEatSpItemRight);
-	this->AddAnimation(-30); // 20 animation eat sp item attack right
+	AddAnimation(-30); // 20 animation eat sp item attack right
 }
 
 void Simon::Update(DWORD dt)
@@ -285,10 +105,18 @@ void Simon::HandleMove()
 	if (InputDevice::GetInstance()->IsKeyDown(DIK_RIGHTARROW) && isGrounded && !isAttack)
 	{
 		SetState(SIMON_STATE_WALKING_RIGHT);
+		if (isSit)
+		{
+			SetState(SIMON_STATE_SIT);
+		}
 	}
 	else if (InputDevice::GetInstance()->IsKeyDown(DIK_LEFTARROW) && isGrounded && !isAttack)
 	{
 		SetState(SIMON_STATE_WALKING_LEFT);
+		if (isSit)
+		{
+			SetState(SIMON_STATE_SIT);
+		}
 	}
 	else if (InputDevice::GetInstance()->IsKeyDown(DIK_DOWNARROW) && isGrounded &&!isAttack)
 	{
@@ -398,11 +226,12 @@ void Simon::Render(ViewPort * camera)
 		}
 		break;
 	}
+	D3DXVECTOR3 viewPortPos = position;
 	if (camera != NULL)
 	{
-		this->position = camera->ConvertPosInViewPort(this->position);
+		viewPortPos = camera->ConvertPosInViewPort(this->position);
 	}
-	animations[ani]->Render(position.x, position.y);
+	animations[ani]->Render(viewPortPos.x, viewPortPos.y);
 }
 
 void Simon::SetState(int state)

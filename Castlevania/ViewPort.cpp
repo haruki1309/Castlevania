@@ -16,7 +16,7 @@ D3DXVECTOR3 ViewPort::ConvertPosInViewPort(D3DXVECTOR3 _realPos)
 	D3DXMATRIX mt;
 	D3DXMatrixIdentity(&mt); //chuyen ma tran mt ve ma tran dong nhat
 
-							 //thiet lap ma tran mt thanh ma tran trung gian
+	//thiet lap ma tran mt thanh ma tran trung gian
 	mt._22 = 1.0f;
 	mt._41 = -this->cameraPos.x;
 	mt._42 = this->cameraPos.y;
@@ -29,7 +29,6 @@ D3DXVECTOR3 ViewPort::ConvertPosInViewPort(D3DXVECTOR3 _realPos)
 	D3DXVec3Transform(&vp_pos, &_realPos, &mt);
 
 	return D3DXVECTOR3(vp_pos.x, vp_pos.y, 0);
-	//return _realPos - cameraPos;
 }
 
 void ViewPort::SetCameraPos(D3DXVECTOR3 _camPos)

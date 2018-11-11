@@ -3,8 +3,8 @@
 
 TileMap::TileMap()
 {
-	tileWidth = 16;
-	tileHeight = 16;
+	tileWidth = TILE_WIDTH;
+	tileHeight = TILE_HEIGHT;
 }
 
 TileMap::TileMap(int _cols, int _rows, int _tileWidth, int _tileHeight)
@@ -92,13 +92,13 @@ void TileMap::LoadMatrixMap(LPCSTR fileSource)
 		countLine++;
 	}
 }
+
 void TileMap::Draw(ViewPort *viewPort)
 {
 	RECT tileRect;
 	D3DXVECTOR3 tilePos;
-	int cameraWidth, cameraHeight;	
-
-	viewPort->GetCameraSize(cameraWidth, cameraHeight);
+	int cameraWidth = viewPort->GetCameraWidth();
+	int cameraHeight = viewPort->GetCameraHeight();
 
 	int colStart = (int)viewPort->GetCameraPos().x / tileWidth;
 	int colEnd = ((int)viewPort->GetCameraPos().x + cameraWidth) / tileWidth < cols - 1 ? ((int)viewPort->GetCameraPos().x + cameraWidth) / tileWidth : cols - 1;
@@ -109,17 +109,16 @@ void TileMap::Draw(ViewPort *viewPort)
 	{
 		for (int j = colStart; j <= colEnd; j++)
 		{	
-			tileRect.left = (matrix[i][j] % 16) * 16;
-			tileRect.top = (matrix[i][j] / 16) * 16;
-			tileRect.right = tileRect.left + 16;
-			tileRect.bottom = tileRect.top + 16;
+			//tileRect dung de lay ra RECT trong tile set de ve
+			tileRect.left = (matrix[i][j] % 16) * tileWidth; // 16 is number of column in tileset
+			tileRect.top = (matrix[i][j] / 16) * tileHeight;
+			tileRect.right = tileRect.left + tileWidth;
+			tileRect.bottom = tileRect.top + tileHeight;
 
-			tilePos = D3DXVECTOR3(j * 16, i * 16 + 40, 0);
+			//tile pos la vi tri de ve tile len camera
+			tilePos = viewPort->ConvertPosInViewPort(D3DXVECTOR3(j * tileWidth, i * tileHeight + 40, 0));
 
-			tilePos = viewPort->ConvertPosInViewPort(tilePos);
-
-			tileSet->Draw(tilePos.x, tilePos.y, tileRect);
-
+			tileSet->Draw((short int)tilePos.x, (short int)tilePos.y, tileRect); //cast pos to int-type to avoid tearing tilemap
 		}
 	}
 }

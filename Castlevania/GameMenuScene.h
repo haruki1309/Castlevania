@@ -13,7 +13,6 @@ public:
 	~GameMenuScene();
 
 	void Update(DWORD dt);
-	void LoadResource();
 	void Initialize();
 	void Draw();
 	void DestroyAll();

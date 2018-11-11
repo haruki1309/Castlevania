@@ -46,30 +46,8 @@ GameIntroScene::~GameIntroScene()
 {
 }
 
-void GameIntroScene::LoadResource()
+void GameIntroScene::LoadAnimation()
 {
-	Textures::GetInstance()->Add(1, TEX_GAME_INTRO, D3DCOLOR_XRGB(128, 0, 0));
-	//background
-	Sprites::GetInstance()->Add(50, 6, 6, 262, 230, Textures::GetInstance()->GetTexture(1));
-
-	//bat
-	Sprites::GetInstance()->Add(51, 287, 102, 295, 109, Textures::GetInstance()->GetTexture(1));
-	Sprites::GetInstance()->Add(52, 274, 102, 282, 110, Textures::GetInstance()->GetTexture(1));
-
-
-	LPANIMATION aniBatFly = new Animation(50);
-	aniBatFly->Add(51);
-	aniBatFly->Add(52);
-
-	Animations::GetInstance()->Add(2, aniBatFly);
-
-	//cloud :) 
-	Sprites::GetInstance()->Add(53, 268, 78, 300, 92, Textures::GetInstance()->GetTexture(1));
-	LPANIMATION aniCloudFly = new Animation(120);
-	aniCloudFly->Add(53);
-	Animations::GetInstance()->Add(3, aniCloudFly);
-
-
 	bat1.AddAnimation(2);
 	bat2.AddAnimation(2);
 	cloud.AddAnimation(3);

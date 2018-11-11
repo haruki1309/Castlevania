@@ -32,7 +32,6 @@ public:
 	DWORD dt;
 
 	vector<LPANIMATION> animations;
-
 public:
 	void SetPosition(float x, float y) { this->position.x = x, this->position.y = y; }
 	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
@@ -41,7 +40,6 @@ public:
 	D3DXVECTOR3 GetPosition() { return this->position; }
 	void GetSpeed(float &vx, float &vy) { vx = this->vx; vy = this->vy; }
 	int GetState() { return this->state; }
-	void AddAnimation(int aniId);
 
 	virtual void Update(DWORD dt);
 	virtual void Render(ViewPort * camera) = 0;
@@ -49,5 +47,8 @@ public:
 
 	GameObject();
 	~GameObject();
+
+	void AddAnimation(int aniId);
+
 };
 

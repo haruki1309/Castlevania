@@ -21,7 +21,8 @@ public:
 
 	void SetCameraSize(int _width, int _height) { cameraWidth = _width; cameraHeight = _height; }
 
-	void GetCameraSize(int &_width, int &_height) { _width = cameraWidth; _height = cameraHeight; }
+	int GetCameraWidth() { return cameraWidth; }
+	int GetCameraHeight() { return cameraHeight; }
 
 	D3DXVECTOR3 GetCameraPos() { return this->cameraPos; }
 

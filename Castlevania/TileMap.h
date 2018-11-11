@@ -6,11 +6,14 @@
 #include "Sprites.h"
 #include "ViewPort.h"
 
+#define TILE_WIDTH 16
+#define TILE_HEIGHT 16
+
 class TileMap
 {
 private:
-	int ** matrix;
-	int cols, rows;
+	int ** matrix; // map data
+	int cols, rows; // cols and rows of our map
 	int tileWidth, tileHeight;
 
 	Sprite * tileSet;

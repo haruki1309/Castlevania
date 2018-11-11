@@ -1,7 +1,9 @@
 #pragma once
 #include "Scene.h"
 #include "TileMap.h"
+#include "UI.h"
 #include "Simon.h"
+#include "Candles.h"
 
 
 class GameEntranceScene : public Scene
@@ -9,13 +11,14 @@ class GameEntranceScene : public Scene
 private:
 	TileMap * entranceMap;
 	ViewPort * entranceViewPort;
-
+	UI * ui;
+	vector<LPGAMEOBJECT> listStaticObject;
+	vector<LPGAMEOBJECT> listMovingObject;
 public:
 	GameEntranceScene();
 	~GameEntranceScene();
 
 	void Update(DWORD dt);
-	void LoadResource();
 	void Initialize();
 	void Draw();
 	void DestroyAll();

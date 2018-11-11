@@ -4,10 +4,8 @@
 
 Whip::Whip()
 {
-	type = NOMAL_WHIP;
-	LoadResource();
+	LoadAnimation();
 }
-
 
 Whip::~Whip()
 {
@@ -21,91 +19,109 @@ Whip * Whip::GetInstance()
 	return _instance;
 }
 
-void Whip::LoadResource()
+void Whip::LoadAnimation()
 {
-	Textures::GetInstance()->Add(100, WHIP_TEX, D3DCOLOR_XRGB(0, 128, 128));
-
-	//nomal left
-	Sprites::GetInstance()->Add(100, 4, 6, 68, 38, Textures::GetInstance()->GetTexture(100));
-	Sprites::GetInstance()->Add(101, 88, 6, 151, 38, Textures::GetInstance()->GetTexture(100));
-	Sprites::GetInstance()->Add(102, 175, 6, 239, 38, Textures::GetInstance()->GetTexture(100));
-
-	LPANIMATION aniNomalLeft = new Animation(100);
-	aniNomalLeft->Add(100);
-	aniNomalLeft->Add(101);
-	aniNomalLeft->Add(102, 200);
-	Animations::GetInstance()->Add(100, aniNomalLeft);
-	this->AddAnimation(100); // 0 animation nomal left
-	//nomal right
-	Sprites::GetInstance()->Add(103, 431, 6, 495, 38, Textures::GetInstance()->GetTexture(100));
-	Sprites::GetInstance()->Add(104, 348, 6, 411, 38, Textures::GetInstance()->GetTexture(100));
-	Sprites::GetInstance()->Add(105, 260, 6, 324, 38, Textures::GetInstance()->GetTexture(100));
-
-	LPANIMATION aniNomalRight = new Animation(100);
-	aniNomalRight->Add(103);
-	aniNomalRight->Add(104);
-	aniNomalRight->Add(105, 200);
-	Animations::GetInstance()->Add(101, aniNomalRight);
-	this->AddAnimation(101); // 1 animation nomal left
+	AddAnimation(100); // 0 animation nomal left
+	AddAnimation(101); // 1 animation nomal left
+	AddAnimation(102); // 2 animation red left
+	AddAnimation(103); // 3 animation red left
 }
 
 void Whip::SetPosition(D3DXVECTOR3 _simonPosition, bool _isStanding, int direction)
 {
-	if (direction == 1)
+	this->nx = direction;
+	switch (type)
 	{
-		isLeft = false;
-	}
-	else if (direction == -1)
-	{
-		isLeft = true;
-	}
-	if (_isStanding)
-	{
-		if (isLeft)
+	case NOMAL_WHIP: case SMALL_WHIP:		
+		if (_isStanding)
 		{
-			position.x = _simonPosition.x - 32;
-			position.y = _simonPosition.y;
+			if (nx == -1)
+			{
+				position.x = _simonPosition.x - 28;
+				position.y = _simonPosition.y + 3;
+			}
+			else if(nx == 1)
+			{
+				position.x = _simonPosition.x - 16;
+				position.y = _simonPosition.y + 3;
+			}
 		}
 		else
 		{
-			position.x = _simonPosition.x - 16;
-			position.y = _simonPosition.y;
+			if (nx == -1)
+			{
+				position.x = _simonPosition.x - 28;
+				position.y = _simonPosition.y + 11;
+			}
+			else if (nx == 1)
+			{
+				position.x = _simonPosition.x - 16;
+				position.y = _simonPosition.y + 11;
+			}
 		}
-	}
-	else
-	{
-		if (isLeft)
+		break;
+	case YELLOW_WHIP: case RED_WHIP: case BLUE_WHIP: case VIOLET_WHIP:
+		if (_isStanding)
 		{
-			position.x = _simonPosition.x - 32;
-			position.y = _simonPosition.y + 8;
+			if (nx = -1)
+			{
+				position.x = _simonPosition.x - 44;
+				position.y = _simonPosition.y + 3;
+			}
+			else if (nx == 1)
+			{
+				position.x = _simonPosition.x - 16;
+				position.y = _simonPosition.y + 3;
+			}
 		}
 		else
 		{
-			position.x = _simonPosition.x - 16;
-			position.y = _simonPosition.y + 8;
+			if (nx == -1)
+			{
+				position.x = _simonPosition.x - 44;
+				position.y = _simonPosition.y + 11;
+			}
+			else if (nx == 1)
+			{
+				position.x = _simonPosition.x - 16;
+				position.y = _simonPosition.y + 11;
+			}
 		}
+		break;
 	}
+	
 }
 
 void Whip::Render(ViewPort * camera)
 {
-	int currentFrame;
 	int ani;
 	switch (type)
 	{
 	case NOMAL_WHIP:
-		if (isLeft)
+		if (nx == -1)
 		{
 			ani = 0;
 		}
-		else
+		else if (nx == 1)
 		{
 			ani = 1;
 		}
+		break;
+	case RED_WHIP:
+		if (nx == -1)
+		{
+			ani = 2;
+		} 
+		else if (nx == 1)
+		{
+			ani = 3;
+		}
+		break;
 	}
+	D3DXVECTOR3 viewPortPos = this->position;
 	if (camera != NULL)
 	{
-		this->position = camera->ConvertPosInViewPort(this->position);
+		viewPortPos = camera->ConvertPosInViewPort(this->position);
 	}
-	animations[ani]->Render(position.x, position.y);
+	animations[ani]->Render(viewPortPos.x, viewPortPos.y);
 }

@@ -13,9 +13,9 @@ protected:
 	D3DCOLOR backColor;
 
 	bool isChangeState;
-
+	float gameTime;
 public:
-	Scene() {};
+	Scene() { gameTime = 0; };
 	~Scene() {};
 
 	virtual void Update(DWORD dt);

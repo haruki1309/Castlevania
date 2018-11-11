@@ -31,6 +31,15 @@
     <Filter Include="GameObjects\Simon">
       <UniqueIdentifier>{cb51ebda-19f5-4e30-b028-a7b0ac97cd65}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameObjects\StaticObject">
+      <UniqueIdentifier>{cf0fb385-b2f2-41cc-9cb2-e6766f9709d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Database">
+      <UniqueIdentifier>{1786a249-6e5d-417d-a17c-cb0b7d1d9120}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObjects\Simon\Subweapons">
+      <UniqueIdentifier>{8ec2ba42-8b61-4deb-962d-b29991c6fb0b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -83,6 +92,21 @@
     </ClInclude>
     <ClInclude Include="Whip.h">
       <Filter>GameObjects\Simon</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>FrameWork\GameComponents</Filter>
+    </ClInclude>
+    <ClInclude Include="Candles.h">
+      <Filter>GameObjects\StaticObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Database.h">
+      <Filter>Database</Filter>
+    </ClInclude>
+    <ClInclude Include="SW_Axe.h">
+      <Filter>GameObjects\Simon\Subweapons</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -137,5 +161,22 @@
     <ClCompile Include="Whip.cpp">
       <Filter>GameObjects\Simon</Filter>
     </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>FrameWork\GameComponents</Filter>
+    </ClCompile>
+    <ClCompile Include="Candles.cpp">
+      <Filter>GameObjects\StaticObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Database.cpp">
+      <Filter>Database</Filter>
+    </ClCompile>
+    <ClCompile Include="SW_Axe.cpp">
+      <Filter>GameObjects\Simon\Subweapons</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Castlevania.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

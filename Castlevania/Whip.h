@@ -16,24 +16,18 @@ class Whip : public GameObject
 private:
 	static Whip * _instance;
 	int type;
-	bool isLeft;
-
 public:
 	Whip();
 	~Whip();
 
 	static Whip * GetInstance();
 
-	void LoadResource();
+	void LoadAnimation();
 
 	void SetPosition(D3DXVECTOR3 _simonPosition, bool isStanding, int direction); 
-
-	void SetIsLeft(bool _isLeft) { isLeft = _isLeft; }
 
 	void SetType(int _type) { type = _type; }
 
 	void Render(ViewPort * camera);
-
-	int GetCurrentFrame() { return animations[type]->GetCurrentFrame(); }
 };
 

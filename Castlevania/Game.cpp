@@ -27,6 +27,11 @@ bool Game::Initialize(HWND hWnd)
 	{
 		return false;
 	}
+
+	Database::GetInstance()->LoadTexture();
+	Database::GetInstance()->CreateSprite();
+	Database::GetInstance()->CreateAnimation();
+
 	return true;
 }
 

@@ -40,7 +40,7 @@ public:
 	~GameIntroScene();
 
 	void Update(DWORD dt);
-	void LoadResource();
+	void LoadAnimation();
 	void Initialize();
 	void Draw();
 	void DestroyAll();
